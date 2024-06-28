@@ -4,7 +4,7 @@ import argparse
 import os
 import time
 
-parser = argparse.ArgumentParser(description="Compare errors",
+parser = argparse.ArgumentParser(description="Compare errors and populate",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-f", "--file", help="input .csv file, example, WBS.csv", required=True)
 parser.add_argument("-e", "--errors", help="file with matching errors", required=True)
@@ -16,14 +16,8 @@ file =os.path.splitext(os.path.basename(path))[0]
 errors =os.path.splitext(os.path.basename(pathErrors))[0]
 folder = os.path.dirname(path)
 
-WBS_ELEMENT = 'WBS_ELEMENT'
-CONTRACT_NUMBER = 'CONTRACT_NUMBER'
-PRODUCTION_NUMBER = 'PRODUCTION_NUMBER'
-RESELLER_CODE = 'RESELLER_CODE'
-STATUS = 'STATUS'
-
-ERROR_KEY_MISSING = 'ERROR - ONE OR MORE KEYS ARE MISSING'
 ERROR_MATCH_NOT_FOUND = 'ERROR - MATCH NOT FOUND'
+rows_column = 'rows'
 
 ######Part1#####################################################
 # populate WBS with WON2SAP data
@@ -56,11 +50,11 @@ with open(path, encoding="utf-8") as inputFile:
                         new_key = (rowfd[1], rowfd[2], rowfd[3])
                         if (new_key in dumpDict1):
                             dd = dumpDict1[new_key]
-                            dd['rows'].append(rowfd)
+                            dd[rows_column].append(rowfd)
                         
                         # rowfd[1] - CONTRACT_NUMBER, rowfd[2] - PRODUCTION_NUMBER, rowfd[3] - RESELLER_CODE
                         else:
-                            val = { "rows": [rowfd] }
+                            val = { rows_column: [rowfd] }
                             dumpDict1[new_key] = val
             
             indexLen = len(list(dumpDict1.keys()))
@@ -82,7 +76,7 @@ with open(path, encoding="utf-8") as inputFile:
             for key in keys:
                 val = dumpDict2[key]
                 if key in dumpDict1:
-                    rows = dumpDict1[key]['rows']
+                    rows = dumpDict1[key][rows_column]
                     count = len(rows)
                     wbs = []
                     for r in rows:

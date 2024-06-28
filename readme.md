@@ -1,0 +1,1 @@
+comparer.py -f "Suoralinja_3894958051036_20240604125358.csv" -e "WBS_LOG_ERROR_2024-06-25_12-52.csv"
