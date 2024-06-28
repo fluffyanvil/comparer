@@ -12,7 +12,7 @@
     <Name>comparer</Name>
     <RootNamespace>comparer</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-f "Suoralinja_3894958051036_20240604125358.csv" -e "WBS_LOG_ERROR_2024-06-25_12-52.csv"</CommandLineArguments>
+    <CommandLineArguments>-f "Suoralinja_3896936515678_20240627103128.csv" -e "WBS_LOG_ERROR_2024-06-25_12-52.csv"</CommandLineArguments>
     <InterpreterPath>C:\Users\serge\AppData\Local\Programs\Python\Python311\python.exe</InterpreterPath>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Suoralinja_3894958051036_20240604125358.csv" />
+    <Content Include="Suoralinja_3896936515678_20240627103128.csv" />
     <Content Include="WBS_LOG_ERROR_2024-06-25_12-52.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

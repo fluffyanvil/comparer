@@ -23,13 +23,17 @@ rows_column = 'rows'
 # populate WBS with WON2SAP data
 start_time = time.time()
 with open(path, encoding="utf-8") as inputFile:
-    input_csv_reader = csv.reader(inputFile, delimiter=';')   
+    input_csv_reader = csv.DictReader(inputFile, delimiter=';')   
     filename = os.path.join(folder, f'{file}.output.csv')
+    input_rows = list(input_csv_reader)
     
     modified_input = filename;
     with open(filename, 'w', newline='', encoding="utf-8") as outfile:
-        
-        output_csv_writer = csv.writer(outfile, delimiter=';')
+        fieldnames = input_csv_reader.fieldnames
+        fieldnames = list(fieldnames)
+        fieldnames.append('WBS_from_file')
+        fieldnames.append('Outcome')
+        output_csv_writer = csv.DictWriter(outfile, delimiter=';', fieldnames=fieldnames)
 
         with open(pathErrors) as inputErrors:      
             errors_csv_reader = csv.reader(inputErrors, delimiter='|')
@@ -58,7 +62,7 @@ with open(path, encoding="utf-8") as inputFile:
                             dumpDict1[new_key] = val
             
             indexLen = len(list(dumpDict1.keys()))
-            input_rows = list(input_csv_reader)
+            
             
 
             dumpDict2 = {}
@@ -66,7 +70,7 @@ with open(path, encoding="utf-8") as inputFile:
                 keys = list(row)
                 if (len(keys) > 0):                    
                     # rowfd[21] - CONTRACT_NUMBER, rowfd[23] - PRODUCTION_NUMBER, rowfd[1] - RESELLER_CODE
-                    dumpDict2[(row[21], row[23], row[1].split(' ')[0])] = row
+                    dumpDict2[(row['ContractID'], row['ProductionNumber'], row['Reseller'].split(' ')[0])] = row
                     
             keys = list(dumpDict2.keys())
             
@@ -82,23 +86,26 @@ with open(path, encoding="utf-8") as inputFile:
                     for r in rows:
                         wbs.append(r[0])
                     
-                    val.append(', '.join(wbs))
+                    val['WBS_from_file'] = ', '.join(wbs)
                     if count == 1:
-                        val.append("MATCH")
+                        val['Outcome'] = "MATCH"
                         match_count += 1
                         
                     if count > 1:
-                        val.append("MULTIPLE MATCHES")
+                        val['Outcome'] = "MULTIPLE MATCHES"
                         multi_match_count += 1
              
+            input_result = []
             for row in input_rows:
                 if len(list(row)) > 0:
-                    key = (row[21], row[23], row[1].split(' ')[0])
+                    key = (row['ContractID'], row['ProductionNumber'], row['Reseller'].split(' ')[0])
                     if key in dumpDict2:
                         val = dumpDict2[key]
                         row = val
-            
-            output_csv_writer.writerows(input_rows)
+                        input_result.append(row)
+                        
+            output_csv_writer.writeheader()
+            output_csv_writer.writerows(input_result)
                 
 # counters for fillings
             # ref23_fill = 0
