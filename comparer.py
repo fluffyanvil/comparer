@@ -136,6 +136,9 @@ with open(path, encoding="utf-8") as inputFile:
                             row[OUTCOME] = 'IN SUORALINJA'
                         if (inner_rows_count > 1):
                             row[OUTCOME] = 'IN SUORALINJA - MULTIPLE MATCHES'
+                    else:
+                        row[OUTCOME] = 'NO MATCH'
+                        
                 
                 errors_csv_writer.writeheader()
                 errors_csv_writer.writerows(error_rows)
